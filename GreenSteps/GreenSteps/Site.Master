@@ -1,0 +1,78 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.Master.cs" Inherits="GreenSteps.SiteMaster" %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%: Page.Title %> - GreenSteps</title>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+</head>
+<body>
+    <form runat="server">
+
+    <nav class="navbar">
+        <div class="logo">
+            <a href="<%= ResolveUrl("~/Default.aspx") %>">🌱 GreenSteps</a>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="<%= ResolveUrl("~/Default.aspx") %>">Home</a></li>
+            <li><a href="<%= ResolveUrl("~/Articles.aspx") %>">Articles</a></li>
+            <li><a href="<%= ResolveUrl("~/Videos.aspx") %>">Videos</a></li>
+            <li><a href="<%= ResolveUrl("~/Quiz.aspx") %>">Quiz</a></li>
+            <li><a href="<%= ResolveUrl("~/About.aspx") %>">About</a></li>
+            <% if (IsLoggedIn && !IsAdmin) { %>
+<li><a href='<%= ResolveUrl("~/Progress.aspx") %>'>📈 My Progress</a></li>
+<% } %>
+
+            <% if (IsAdmin) { %>
+            <li class="admin-dropdown">
+                <a href="<%= ResolveUrl("~/Admin/Dashboard.aspx") %>" class="admin-toggle">
+                    ⚙️ Admin <span class="arrow">▾</span>
+                </a>
+                <ul class="admin-menu">
+                    <li><a href="<%= ResolveUrl("~/Admin/Dashboard.aspx") %>">📊 Dashboard</a></li>
+                    <li><a href="<%= ResolveUrl("~/Admin/Articles/Index.aspx") %>">📚 Manage Articles</a></li>
+                    <li><a href="<%= ResolveUrl("~/Admin/Videos/Index.aspx") %>">🎬 Manage Videos</a></li>
+                    <li><a href="<%= ResolveUrl("~/Admin/Quizzes/Index.aspx") %>">🧠 Manage Quizzes</a></li>
+                    <li><a href='<%= ResolveUrl("~/Admin/Progress/Index.aspx") %>'>📊 User Progress</a></li>
+                    <li><a href='<%= ResolveUrl("~/Admin/Users/Index.aspx") %>'>👥 Manage Users</a></li>
+                </ul>
+            </li>
+            <% } %>
+        </ul>
+
+        <div class="nav-buttons">
+            <% if (IsLoggedIn) { %>
+                <span class="welcome-text">
+                    👋 Hi, <%: UserName %>
+                    <% if (IsAdmin) { %>
+                        <span class="role-badge admin-badge">ADMIN</span>
+                    <% } else { %>
+                        <span class="role-badge">USER</span>
+                    <% } %>
+                </span>
+                <a href="<%= ResolveUrl("~/Account/Logout.aspx") %>" class="btn-logout"
+                   onclick="return confirm('👋 Are you sure you want to logout?');">Logout</a>
+            <% } else { %>
+                <a href="<%= ResolveUrl("~/Account/Login.aspx") %>" class="btn-login">Login</a>
+                <a href="<%= ResolveUrl("~/Account/Register.aspx") %>" class="btn-register">Register</a>
+            <% } %>
+        </div>
+    </nav>
+
+    <asp:Literal ID="litWelcomeBanner" runat="server" />
+
+    <main>
+        <asp:ContentPlaceHolder ID="MainContent" runat="server">
+        </asp:ContentPlaceHolder>
+    </main>
+
+    <footer class="site-footer">
+        <p>🌱 <strong>GreenSteps</strong> — Sustainable Living Learning Platform</p>
+    </footer>
+
+    </form>
+</body>
+</html>
